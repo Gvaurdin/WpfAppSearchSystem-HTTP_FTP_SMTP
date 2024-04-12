@@ -1,0 +1,9 @@
+﻿<Application x:Class="WpfAppSearchSystem_HTTP_FTP_SMTP.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfAppSearchSystem_HTTP_FTP_SMTP"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
