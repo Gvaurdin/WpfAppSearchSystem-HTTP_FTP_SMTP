@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +24,21 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string searchTerm = SearchTextBox.Text;
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                string searchUrl = $"https://www.google.com/search?q={WebUtility.UrlEncode(searchTerm)}";
+                Browser.Navigate(new Uri(searchUrl));
+            }
+            else
+            {
+                MessageBox.Show("Введите текст для поиска.");
+            }
         }
     }
 }
