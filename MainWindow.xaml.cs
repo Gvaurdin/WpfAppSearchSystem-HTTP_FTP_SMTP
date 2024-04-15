@@ -28,16 +28,60 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string searchTerm = SearchTextBox.Text;
+            string query = QueryTextBox.Text;
+            List<string> selectedSearchEngines = GetSelectedSearchEngines();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query) && selectedSearchEngines.Count > 0)
             {
-                string searchUrl = $"https://www.google.com/search?q={WebUtility.UrlEncode(searchTerm)}";
-                Browser.Navigate(new Uri(searchUrl));
+                foreach (string searchEngine in selectedSearchEngines)
+                {
+                    string searchUrl = GetSearchUrl(searchEngine, query);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(searchUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при запуске браузера: {ex.Message}");
+                    }
+                }
             }
             else
             {
-                MessageBox.Show("Введите текст для поиска.");
+                MessageBox.Show("Выберите хотя бы одну поисковую систему и введите текст для поиска.");
+            }
+        }
+
+        private List<string> GetSelectedSearchEngines()
+        {
+            List<string> selectedEngines = new List<string>();
+
+            if (GoogleCheckBox.IsChecked == true)
+            {
+                selectedEngines.Add("Google");
+            }
+
+            if (BingCheckBox.IsChecked == true)
+            {
+                selectedEngines.Add("Bing");
+            }
+
+            // Добавьте другие поисковые системы здесь по аналогии
+
+            return selectedEngines;
+        }
+
+        private string GetSearchUrl(string searchEngine, string query)
+        {
+            switch (searchEngine)
+            {
+                case "Google":
+                    return $"https://www.google.com/search?q={WebUtility.UrlEncode(query)}";
+                case "Bing":
+                    return $"https://www.bing.com/search?q={WebUtility.UrlEncode(query)}";
+                // Добавьте другие поисковые системы здесь по аналогии
+                default:
+                    throw new ArgumentException("Неподдерживаемая поисковая система.");
             }
         }
     }
