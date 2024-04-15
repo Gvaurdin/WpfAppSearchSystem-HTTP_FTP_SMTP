@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +22,7 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -28,61 +32,52 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            string query = QueryTextBox.Text;
-            List<string> selectedSearchEngines = GetSelectedSearchEngines();
-
-            if (!string.IsNullOrWhiteSpace(query) && selectedSearchEngines.Count > 0)
+            string query = SearchBox.Text;
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                foreach (string searchEngine in selectedSearchEngines)
+                string searchResults = string.Empty;
+                if (YandexRadioButton.IsChecked == true)
                 {
-                    string searchUrl = GetSearchUrl(searchEngine, query);
-                    try
-                    {
-                        System.Diagnostics.Process.Start(searchUrl);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Ошибка при запуске браузера: {ex.Message}");
-                    }
+                    searchResults = SearchInYandex(query);
                 }
+                else if (MailruRadioButton.IsChecked == true)
+                {
+                    searchResults = SearchInMailRu(query);
+                }
+                DisplayResults(searchResults);
             }
             else
             {
-                MessageBox.Show("Выберите хотя бы одну поисковую систему и введите текст для поиска.");
+                MessageBox.Show("Введите текст для поиска.");
             }
         }
 
-        private List<string> GetSelectedSearchEngines()
+        private string SearchInYandex(string query)
         {
-            List<string> selectedEngines = new List<string>();
-
-            if (GoogleCheckBox.IsChecked == true)
-            {
-                selectedEngines.Add("Google");
-            }
-
-            if (BingCheckBox.IsChecked == true)
-            {
-                selectedEngines.Add("Bing");
-            }
-
-            // Добавьте другие поисковые системы здесь по аналогии
-
-            return selectedEngines;
+            string searchUrl = $"https://yandex.ru/search/?text={Uri.EscapeDataString(query)}";
+            return GetSearchResults(searchUrl);
         }
 
-        private string GetSearchUrl(string searchEngine, string query)
+        private string SearchInMailRu(string query)
         {
-            switch (searchEngine)
+            string searchUrl = $"https://go.mail.ru/search?q={Uri.EscapeDataString(query)}";
+            return GetSearchResults(searchUrl);
+        }
+
+        private string GetSearchResults(string url)
+        {
+            WebRequest request = WebRequest.Create(url);
+            using (WebResponse response = request.GetResponse())
+            using (Stream dataStream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(dataStream, Encoding.UTF8))
             {
-                case "Google":
-                    return $"https://www.google.com/search?q={WebUtility.UrlEncode(query)}";
-                case "Bing":
-                    return $"https://www.bing.com/search?q={WebUtility.UrlEncode(query)}";
-                // Добавьте другие поисковые системы здесь по аналогии
-                default:
-                    throw new ArgumentException("Неподдерживаемая поисковая система.");
+                return reader.ReadToEnd();
             }
+        }
+
+        private void DisplayResults(string results)
+        {
+            ResultsTextBox.Text = results;
         }
     }
 }

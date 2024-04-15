@@ -46,18 +46,18 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
                         }
                         else
                         {
-                            MessageBox.Show($"Нет результатов для поисковой системы: {searchEngine}");
+                            MessageBox.Show($"No results for search system: {searchEngine}");
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка при выполнении поиска для {searchEngine}: {ex.Message}");
+                        MessageBox.Show($"Error working search system {searchEngine}: {ex.Message}");
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Выберите хотя бы одну поисковую систему и введите текст для поиска.");
+                MessageBox.Show("Change to search system.");
             }
         }
 
@@ -75,7 +75,7 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
                 selectedEngines.Add("Bing");
             }
 
-            // Добавьте другие поисковые системы здесь по аналогии
+
 
             return selectedEngines;
         }
@@ -88,9 +88,8 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
                     return $"https://www.google.com/search?q={WebUtility.UrlEncode(query)}&tbm=isch";
                 case "Bing":
                     return $"https://www.bing.com/images/search?q={WebUtility.UrlEncode(query)}";
-                // Добавьте другие поисковые системы здесь по аналогии
                 default:
-                    throw new ArgumentException("Неподдерживаемая поисковая система.");
+                    throw new ArgumentException("Search system no support.");
             }
         }
 
@@ -98,7 +97,7 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
         {
             List<string> imageUrls = new List<string>();
 
-            // Регулярное выражение для поиска URL изображений
+            // регулярное выражение для поиска URL изображений
             string pattern = @"(?<=<img\s+[^>]*?src=(['""]))[^'""\s>]+";
 
             foreach (Match match in Regex.Matches(html, pattern, RegexOptions.IgnoreCase))
@@ -130,7 +129,7 @@ namespace WpfAppSearchSystem_HTTP_FTP_SMTP
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при загрузке изображения: {ex.Message}");
+                    MessageBox.Show($"Error: {ex.Message}");
                 }
             }
         }

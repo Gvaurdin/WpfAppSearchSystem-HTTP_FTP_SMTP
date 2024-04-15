@@ -22,7 +22,6 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,10,10,10" Grid.ColumnSpan="2">
             <CheckBox x:Name="GoogleCheckBox" Content="Google"/>
             <CheckBox x:Name="BingCheckBox" Content="Bing"/>
-            <!-- Добавьте другие флажки для других поисковых систем -->
         </StackPanel>
 
         <Button x:Name="SearchButton" Grid.Row="1" Margin="128,6,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Поиск" Click="SearchButton_Click" />

@@ -12,15 +12,14 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <TextBox x:Name="QueryTextBox" Grid.Row="0" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-            <CheckBox x:Name="GoogleCheckBox" Content="Google"/>
-            <CheckBox x:Name="BingCheckBox" Content="Bing"/>
-            <!-- Добавьте другие флажки для других поисковых систем -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBox x:Name="SearchBox" Width="200"/>
+            <Button Content="Search" Click="SearchButton_Click"/>
         </StackPanel>
-
-        <Button x:Name="SearchButton" Grid.Row="2" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Поиск" Click="SearchButton_Click" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <RadioButton x:Name="YandexRadioButton" Content="Yandex" IsChecked="True"/>
+            <RadioButton x:Name="MailruRadioButton" Content="Mail.ru"/>
+        </StackPanel>
+        <TextBox x:Name="ResultsTextBox" Grid.Row="2"/>
     </Grid>
 </Window>
